@@ -1,6 +1,6 @@
 # Data Access part
-- [ ] Collect list of countries and their associated urls pages 
+- [x] Collect list of countries and their associated urls pages 
 
 # Testing 
-- [ ] Put in place a unit testing scenario
-- [ ] Unit testing for utils function in datarequest package
+- [x] Put in place a unit testing scenario
+- [x] Unit testing for utils function in datarequest package
