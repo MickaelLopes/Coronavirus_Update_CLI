@@ -1,13 +1,14 @@
-from datarequest.utils import _normalize_string
+import sys
 import unittest
 
+import context
+from coronavirus_cli.datarequest.utils import _normalize_country_name
+
+# print(sys.path)
 class unittest_datarequest(unittest.TestCase): 
     
     def test_normalize_string(self):
-        self.assertEqual(_normalize_string('USA'), 'USA')        
-        self.assertEqual(_normalize_string('S. Korea'), 'SKorea')
-        self.assertEqual(_normalize_string('portugal'), 'Portugal')
-        self.assertEqual(_normalize_string('new zealand'), 'NewZealand')
-
-
-unittest.main()
+        self.assertEqual(_normalize_country_name('USA'), 'USA')        
+        self.assertEqual(_normalize_country_name('S. Korea'), 'S_Korea')
+        self.assertEqual(_normalize_country_name('portugal'), 'Portugal')
+        self.assertEqual(_normalize_country_name('new zealand'), 'New_Zealand')
