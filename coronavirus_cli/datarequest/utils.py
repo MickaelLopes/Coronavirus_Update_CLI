@@ -5,6 +5,7 @@ from string import punctuation
 import requests
 from bs4 import BeautifulSoup
 import sys
+from .urls import *
 
 def _normalize_country_name(s : str):
     """
@@ -29,7 +30,30 @@ def _normalize_country_name(s : str):
             new_list.append(el)
     return '_'.join(new_list)
 
-
+def _find_country_row(soup: BeautifulSoup, country : str): 
+    """
+    Search in the soup tags for the data row corresponding to the country by matching the 'href' tag with the country urls
+    
+    Parameters: 
+        soup(BeautifulSoup) : Beautiful soup object of the main webpage(worldometers)
+        country(str) : Country name searched, need to match the name of the coutries.txt file
+    
+    Return 
+        data_row(list): Return the soup row of the corresponding country in a list in which each element will correspond to a column of the row
+    """
+    try:
+         sub_url = globals()[country][42:]
+    except KeyError as e: 
+        print('The country given does not exist in the list of countries available')
+        sys.exit(1)
+    
+    
+    # Need to place ourself on the table of today's data. There is two other hidden table in the html, with yesterday and after yesterday data
+    data_today_info = soup.find('div', id = 'nav-today')
+    # Then search the country row in this table
+    country_name_tag = data_today_info.find('a', class_ ='mt_a', href = sub_url)
+    country_row = country_name_tag.parent.parent.find_all('td')
+    return country_row, country_name_tag.text 
 def _init_list_coutry(): 
     """
     Function to initialize the list of countries available in the CLI (see countries.py) and the dictionnary of the urls per countries (see urls.py)
