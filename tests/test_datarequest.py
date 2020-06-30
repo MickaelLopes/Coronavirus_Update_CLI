@@ -3,7 +3,7 @@ import unittest
 import context
 import requests
 
-from coronavirus_cli.datarequest.utils import _normalize_country_name, _find_country_row
+from coronavirus_cli.datarequest.utils import _normalize_country_name, _find_country_row, _convert_data_string_to_int
 from coronavirus_cli.datarequest.global_data import GlobalData
 from coronavirus_cli.datarequest import urls
 from bs4 import BeautifulSoup
@@ -30,6 +30,16 @@ class unittest_utils_function(unittest.TestCase):
         self.assertEqual(test_country_USA, 'USA')
         self.assertEqual(test_country_Sao_tome, 'Sao Tome and Principe')
         self.assertEqual(test_country_South_korea, 'S. Korea')
+    
+    def test_convert_data_string_to_int(self):
+        self.assertEqual(_convert_data_string_to_int('105'), 105)
+        self.assertEqual(_convert_data_string_to_int('1,086,990'), 1086990)
+        self.assertEqual(_convert_data_string_to_int('1,086,990  '), 1086990)
+        self.assertEqual(_convert_data_string_to_int('+12,598'), 12598)
+        self.assertEqual(_convert_data_string_to_int(''), 0)
+        self.assertEqual(_convert_data_string_to_int(' '), 0)
+        with self.assertRaises(ValueError):
+            _convert_data_string_to_int('USA')
 class unittest_connectivity(unittest.TestCase):
     """
     Test the connectivity to request the url and parsed them with beautifoul soup
@@ -63,7 +73,7 @@ class unittest_global_data_world(unittest.TestCase):
     def test_world_data_active_cases(self):
         self.assertEqual(self.test_global_world.get_number_active_case(), 3738783)
     def test_world_data_revover_cases(self):
-        self.assertEqual(self.test_global_world.get_number_revover(), 4841948)
+        self.assertEqual(self.test_global_world.get_number_recover(), 4841948)
     def test_world_data_death_cases(self): 
         self.assertEqual(self.test_global_world.get_number_death(), 470804)
 
@@ -73,13 +83,14 @@ class unittest_global_data_USA(unittest.TestCase):
     """
     def setUp(self):
         self.test_global_USA = GlobalData(test_url=context.TEST_WORLD_URL)
+        
 
     def test_world_data_total_cases(self):
         self.assertEqual(self.test_global_USA.get_number_cases(country='USA'), 2356657)
     def test_world_data_active_cases(self):
         self.assertEqual(self.test_global_USA.get_number_active_case(country='USA'), 1254055)
     def test_world_data_revover_cases(self):
-        self.assertEqual(self.test_global_USA.get_number_revover(country='USA'), 980355)
+        self.assertEqual(self.test_global_USA.get_number_recover(country='USA'), 980355)
     def test_world_data_death_cases(self): 
         self.assertEqual(self.test_global_USA.get_number_death(country='USA'), 122247)
 
@@ -95,7 +106,7 @@ class unittest_global_data_South_Korea(unittest.TestCase):
     def test_world_data_active_cases(self):
         self.assertEqual(self.test_global_South_Korea.get_number_active_case(country='S_Korea'), 1277)
     def test_world_data_revover_cases(self):
-        self.assertEqual(self.test_global_South_Korea.get_number_revover(country='S_Korea'), 10881)
+        self.assertEqual(self.test_global_South_Korea.get_number_recover(country='S_Korea'), 10881)
     def test_world_data_death_cases(self): 
         self.assertEqual(self.test_global_South_Korea.get_number_death(country='S_Korea'), 280)
         
@@ -112,7 +123,23 @@ class unittest_global_data_Tri_Tob(unittest.TestCase):
     def test_world_data_active_cases(self):
         self.assertEqual(self.test_global_Trinidad_and_Tobago.get_number_active_case(country='Trinidad_And_Tobago'), 6)
     def test_world_data_revover_cases(self):
-        self.assertEqual(self.test_global_Trinidad_and_Tobago.get_number_revover(country='Trinidad_And_Tobago'), 109)
+        self.assertEqual(self.test_global_Trinidad_and_Tobago.get_number_recover(country='Trinidad_And_Tobago'), 109)
     def test_world_data_death_cases(self):
         self.assertEqual(self.test_global_Trinidad_and_Tobago.get_number_death(country='Trinidad_And_Tobago'), 8)
+    
+class unittest_global_data_Vietnam(unittest.TestCase):
+    """
+    Testing of the global_data and extract data from Trinidad and tobago
+    """
+    def setUp(self):
+        self.test_global_Vietnam = GlobalData(test_url=context.TEST_WORLD_URL)
+    
+    def test_world_data_total_cases(self):
+        self.assertEqual(self.test_global_Vietnam.get_number_cases(country='Vietnam'), 349)
+    def test_world_data_active_cases(self):
+        self.assertEqual(self.test_global_Vietnam.get_number_active_case(country='Vietnam'), 22)
+    def test_world_data_revover_cases(self):
+        self.assertEqual(self.test_global_Vietnam.get_number_recover(country='Vietnam'), 327)
+    def test_world_data_death_cases(self):
+        self.assertEqual(self.test_global_Vietnam.get_number_death(country='Vietnam'), 0)
     
