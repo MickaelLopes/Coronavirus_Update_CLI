@@ -14,3 +14,8 @@
 - [x] Unit testing for utils function in datarequest package
 
 # Interfarce 
+- [x] create interface which display all data
+- [x] Add tags to select data to show
+- [ ] Add option to show all country available 
+- [ ] Redesign presentation of data
+- [ ] Add description command line to readme
