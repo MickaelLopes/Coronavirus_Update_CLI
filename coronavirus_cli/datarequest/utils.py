@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import sys
 from .urls import *
 
+
 def _normalize_country_name(s : str):
     """
     Normalize a string by removing whitespace & punctuation and capitalize each word.
@@ -38,7 +39,7 @@ def _find_country_row(soup: BeautifulSoup, country : str):
         soup(BeautifulSoup) : Beautiful soup object of the main webpage(worldometers)
         country(str) : Country name searched, need to match the name of the coutries.txt file
     
-    Return 
+    Return :
         data_row(list): Return the soup row of the corresponding country in a list in which each element will correspond to a column of the row
     """
     try:
@@ -83,3 +84,24 @@ def _init_list_coutry():
         print('Error when getting page')
         print(f'Page Status Code :{r.status_code}')
         sys.exit(1)
+
+def _convert_data_string_to_int(s : str): 
+    """
+    Transform the data string extracted from the webpage and return the corresponding int
+
+    Parameters: 
+        s(str) : String of the data extracted from the webpage
+
+    Return : 
+        n(int) : Reformatted integer value extracted from the string s
+    """
+    # Strip integer from all punctuation like , + - or space
+    s = s.replace(',','').replace('+','').replace('-','').replace(' ','')
+    if s == '': 
+        n = 0
+    else :    
+        if s.isnumeric(): 
+            n = int(s)
+        else: 
+            raise ValueError
+    return n
