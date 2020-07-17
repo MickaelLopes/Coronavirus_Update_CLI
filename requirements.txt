@@ -2,3 +2,4 @@ cleo library
 beutifulsoup
 requests
 unittest
+tabulate
